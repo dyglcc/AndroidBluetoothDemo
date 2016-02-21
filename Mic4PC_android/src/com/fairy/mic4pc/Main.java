@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.media.AudioRecord;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +25,7 @@ public class Main extends Activity {
 	private Button buttonTurnOff = null;
 	private BluetoothAdapter mBluetoothAdapter = null;
 	private BluetoothSender mBluetoothSender = null;
-	private MyAudioRecord mAudioRecord = null;
+	private AudioRecord mAudioRecord = null;
 	private BluetoothDevice rDevice = null;
 
 	@Override
@@ -33,14 +34,12 @@ public class Main extends Activity {
 		Log.e(TAG, "On Create");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		// 获得蓝牙适配器
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 		if (mBluetoothAdapter == null) {
 			Toast.makeText(this, R.string.no_bluetooth, Toast.LENGTH_LONG)
 					.show();
 			return;
 		}
-		// 如果蓝牙没开启，则开启
 		if (!mBluetoothAdapter.isEnabled()) {
 			startActivity(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE));
 		}
@@ -49,7 +48,7 @@ public class Main extends Activity {
 		buttonTurnOn = (Button) findViewById(R.id.buttonTurnOn);
 		buttonTurnOff = (Button) findViewById(R.id.buttonTurnOff);
 		buttonConnect.setOnClickListener(new ConnectOnClickListener());
-		mAudioRecord=new MyAudioRecord();
+		mAudioRecord= MyAudioRecord.getInstance().getRecord();
 	}
 
 	@Override
@@ -57,8 +56,14 @@ public class Main extends Activity {
 		// TODO Auto-generated method stub
 		super.onDestroy();
 		Log.e(TAG, "On destroy");
-		mAudioRecord.release();
-		mBluetoothSender.stop();
+		disconnect();
+		if(mAudioRecord!=null){
+			mAudioRecord.release();
+			mAudioRecord = null;
+		}
+		if(mBluetoothSender!=null){
+			mBluetoothSender.stop();
+		}
 	}
 
 	class ConnectOnClickListener implements OnClickListener {
@@ -101,17 +106,23 @@ public class Main extends Activity {
 
 		public void onClick(View arg0) {
 			// TODO Auto-generated method stub
-			Log.e(TAG, "DisconnectOnClickListener");
-			mBluetoothSender.stop();
-			Toast.makeText(getApplicationContext(), "Disconnect",
-					Toast.LENGTH_SHORT).show();
-			buttonConnect.setOnClickListener(new ConnectOnClickListener());
-			buttonDisconnect.setOnClickListener(null);
-			buttonTurnOff.setOnClickListener(null);
-			buttonTurnOn.setOnClickListener(null);
+			disconnect();
 		}
 	}
-	
+
+	private void disconnect() {
+		Log.e(TAG, "DisconnectOnClickListener");
+		if(mBluetoothSender!=null){
+			mBluetoothSender.stop();
+		}
+		Toast.makeText(getApplicationContext(), "Disconnect",
+				Toast.LENGTH_SHORT).show();
+		buttonConnect.setOnClickListener(new ConnectOnClickListener());
+		buttonDisconnect.setOnClickListener(null);
+		buttonTurnOff.setOnClickListener(null);
+		buttonTurnOn.setOnClickListener(null);
+	}
+
 
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Log.e(TAG, "onActivityResult");

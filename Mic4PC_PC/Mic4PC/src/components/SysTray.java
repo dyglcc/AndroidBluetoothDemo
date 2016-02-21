@@ -22,7 +22,8 @@ public class SysTray {
 	
 	public void show(){
 		try{			 
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
+//			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel"); 
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"); 
 		}
 		catch (Exception ex) { 
 			ex.printStackTrace(); 
@@ -52,8 +53,8 @@ public class SysTray {
 		PopupMenu pop = new PopupMenu(); // ����һ���Ҽ�����ʽ�˵� 
 
 		/** �Ҽ�����ʽ�˵���ѡ�� */		
-		MenuItem exit = new MenuItem("22222222"); 
-		MenuItem about = new MenuItem("333333333333"); 
+		MenuItem exit = new MenuItem("exit"); 
+		MenuItem about = new MenuItem("about"); 
 
 		pop.add(exit);
 		pop.add(about);

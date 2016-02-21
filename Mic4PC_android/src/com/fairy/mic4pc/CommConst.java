@@ -4,7 +4,7 @@ public class CommConst {
 	public static final char NEW_MESSAGE = 'a';
 	public static final char NEW_USER = 'b';
 	public static final char LOST_USER = 'c';
-	public static final char SEPERATE_CHAR = '…d';
+	public static final char SEPERATE_CHAR = 'd';
 	public static final String YOUR_USER_NAME = "yourusername";
 	public static final String YOUR_MESSAGE = "yourmessage";
 	public static final String USER_NUM = "usernum";

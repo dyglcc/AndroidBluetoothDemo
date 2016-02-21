@@ -13,7 +13,7 @@ public class BlueRemote {
 	
 	public static void main(String[] args){
 		BlueService bs=new BlueService();
-		
+		 
 		if(bs.initialBluetooth()){
 			new SysTray().show();
 			bs.startService();
